@@ -1,0 +1,32 @@
+@model WebApplication2.Models.Bed
+@{ ViewData["Title"] = "Add Bed"; }
+
+<h1>Add Bed</h1>
+
+<div class="row">
+    <div class="col-md-5">
+        <form asp-action="Create" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="WardName" class="form-label"></label>
+                <input asp-for="WardName" class="form-control" placeholder="e.g. ICU-103, General-C1" />
+                <span asp-validation-for="WardName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="BedType" class="form-label"></label>
+                <select asp-for="BedType" asp-items="Html.GetEnumSelectList<WebApplication2.Models.BedType>()" class="form-select">
+                </select>
+                <span asp-validation-for="BedType" class="text-danger"></span>
+                <small class="text-muted">ICU beds may only host critical patients.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,53 @@
+@model WebApplication2.Models.Patient
+@{ ViewData["Title"] = "Add Patient"; }
+
+<h1>Add Patient</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="PatientName" class="form-label"></label>
+                <input asp-for="PatientName" class="form-control" />
+                <span asp-validation-for="PatientName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Age" class="form-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DiseaseCategory" class="form-label"></label>
+                <input asp-for="DiseaseCategory" class="form-control" placeholder="e.g. Pneumonia, Dengue" />
+                <span asp-validation-for="DiseaseCategory" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-4">
+                    <label asp-for="Temperature" class="form-label"></label>
+                    <input asp-for="Temperature" class="form-control" />
+                    <span asp-validation-for="Temperature" class="text-danger"></span>
+                </div>
+                <div class="mb-3 col-4">
+                    <label asp-for="PulseRate" class="form-label"></label>
+                    <input asp-for="PulseRate" class="form-control" />
+                    <span asp-validation-for="PulseRate" class="text-danger"></span>
+                </div>
+                <div class="mb-3 col-4">
+                    <label asp-for="OxygenLevel" class="form-label"></label>
+                    <input asp-for="OxygenLevel" class="form-control" />
+                    <span asp-validation-for="OxygenLevel" class="text-danger"></span>
+                </div>
+            </div>
+            <small class="text-muted d-block mb-3">Note: oxygen below 92% automatically marks the patient critical.</small>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

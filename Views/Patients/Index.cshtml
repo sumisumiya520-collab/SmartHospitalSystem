@@ -1,0 +1,65 @@
+@model IEnumerable<WebApplication2.Models.Patient>
+@{ ViewData["Title"] = "Patients"; }
+
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <h1 class="mb-0">Patients</h1>
+    <a asp-action="Create" class="btn btn-primary">+ Add Patient</a>
+</div>
+
+@if (TempData["Status"] is string status)
+{
+    <div class="alert alert-info">@status</div>
+}
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Disease</th>
+                    <th>Temp (C)</th>
+                    <th>Pulse</th>
+                    <th>O2 %</th>
+                    <th>Status</th>
+                    <th style="width: 22%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr class="@(p.IsCritical ? "table-danger" : null)">
+                        <td><strong>@p.PatientName</strong></td>
+                        <td>@p.Age</td>
+                        <td>@p.DiseaseCategory</td>
+                        <td><span class="vital-value">@p.Temperature.ToString("0.0")</span></td>
+                        <td><span class="vital-value">@p.PulseRate</span></td>
+                        <td>
+                            <span class="vital-value @(p.OxygenLevel < 92 ? "text-danger" : "")">@p.OxygenLevel.ToString("0.0")</span>
+                        </td>
+                        <td>
+                            @if (p.IsCritical)
+                            {
+                                <span class="badge bg-danger"><span class="pulse-dot"></span>Critical</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Stable</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@p.PatientID" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@p.PatientID" class="btn btn-sm btn-outline-secondary">Details</a>
+                            <a asp-action="Delete" asp-route-id="@p.PatientID" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="8" class="text-center text-muted py-4">No patients yet.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

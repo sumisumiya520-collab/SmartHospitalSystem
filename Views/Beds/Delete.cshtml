@@ -1,0 +1,16 @@
+@model WebApplication2.Models.Bed
+@{ ViewData["Title"] = "Delete Bed"; }
+
+<h1>Delete Bed</h1>
+
+<div class="alert alert-warning" style="max-width: 34rem;">
+    Are you sure you want to delete bed <strong>@Model.WardName</strong> (@Model.BedType)?
+    Occupied beds cannot be removed.
+</div>
+
+<div>
+    <form asp-action="Delete" asp-route-id="@Model.BedID" method="post">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

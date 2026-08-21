@@ -1,0 +1,24 @@
+@model WebApplication2.Models.Patient
+@{ ViewData["Title"] = "Patient Details"; }
+
+<h1>Patient Details</h1>
+
+<div class="card" style="max-width: 34rem;">
+    <div class="card-header @(Model.IsCritical ? "bg-danger text-white" : "bg-success text-white")">
+        @(Model.IsCritical ? "CRITICAL PATIENT" : "STABLE")
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Patient ID:</strong> @Model.PatientID</li>
+        <li class="list-group-item"><strong>Name:</strong> @Model.PatientName</li>
+        <li class="list-group-item"><strong>Age:</strong> @Model.Age</li>
+        <li class="list-group-item"><strong>Disease Category:</strong> @Model.DiseaseCategory</li>
+        <li class="list-group-item"><strong>Temperature:</strong> @Model.Temperature.ToString("0.0") C</li>
+        <li class="list-group-item"><strong>Pulse Rate:</strong> @Model.PulseRate bpm</li>
+        <li class="list-group-item"><strong>Oxygen Level:</strong> @Model.OxygenLevel.ToString("0.0") %</li>
+    </ul>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.PatientID" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>

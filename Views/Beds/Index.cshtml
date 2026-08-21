@@ -1,0 +1,72 @@
+@model IEnumerable<WebApplication2.Models.Bed>
+@{ ViewData["Title"] = "Beds"; }
+
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <h1 class="mb-0">Beds</h1>
+    <a asp-action="Create" class="btn btn-primary">+ Add Bed</a>
+</div>
+
+@if (TempData["Status"] is string status)
+{
+    <div class="alert alert-info">@status</div>
+}
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Ward</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Last Sanitized</th>
+                    <th style="width: 25%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr>
+                        <td><strong>@b.WardName</strong></td>
+                        <td>
+                            @if (b.BedType == WebApplication2.Models.BedType.ICU)
+                            {
+                                <span class="badge bg-dark">ICU</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark border">General</span>
+                            }
+                        </td>
+                        <td>
+                            @if (b.IsOccupied)
+                            {
+                                <span class="badge bg-danger">Occupied</span>
+                            }
+                            else if (b.IsSanitationOverdue())
+                            {
+                                <span class="badge bg-warning text-dark">Sanitation Overdue</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Ready</span>
+                            }
+                        </td>
+                        <td>@b.LastSanitized.ToString("dd MMM yyyy hh:mm tt")</td>
+                        <td>
+                            <form asp-action="Sanitize" asp-route-id="@b.BedID" method="post" class="d-inline">
+                                <button class="btn btn-sm btn-outline-success" title="Mark as sanitized now">Sanitize</button>
+                            </form>
+                            <a asp-action="Edit" asp-route-id="@b.BedID" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@b.BedID" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="5" class="text-center text-muted py-4">No beds yet.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

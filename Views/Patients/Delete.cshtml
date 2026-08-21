@@ -1,0 +1,19 @@
+@model WebApplication2.Models.Patient
+@{ ViewData["Title"] = "Delete Patient"; }
+
+<h1>Delete Patient</h1>
+
+<div class="alert alert-warning" style="max-width: 34rem;">
+    Are you sure you want to delete <strong>@Model.PatientName</strong>?
+    @if (Model.AssignedBedID.HasValue)
+    {
+        <span>Their bed will be released automatically.</span>
+    }
+</div>
+
+<div>
+    <form asp-action="Delete" asp-route-id="@Model.PatientID" method="post">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>

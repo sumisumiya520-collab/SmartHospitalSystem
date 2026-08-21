@@ -1,0 +1,263 @@
+@model WebApplication2.Models.HospitalManager
+@{
+    ViewData["Title"] = "Monitoring Dashboard";
+    var filter = ViewBag.Filter as string ?? "All";
+
+    // UI requirement: Filter (Critical, ICU Required, Unallocated).
+    Func<WebApplication2.Models.Patient, bool> matches = filter switch
+    {
+        "Critical" => p => p.IsCritical,
+        "ICU Required" => p => p.IsCritical && !p.AssignedBedID.HasValue,
+        "Unallocated" => p => !p.AssignedBedID.HasValue,
+        _ => _ => true
+    };
+
+    var patients = Model.Patients.Where(p => matches(p)).ToList();
+    var beds = Model.Beds.ToList();
+
+    // Summary figures for the stat tiles.
+    int totalPatients = Model.Patients.Count;
+    int criticalCount = Model.Patients.Count(p => p.IsCritical);
+    int occupiedBeds = beds.Count(b => b.IsOccupied);
+    int overdueBeds = beds.Count(b => b.IsSanitationOverdue());
+    string[] filters = { "All", "Critical", "ICU Required", "Unallocated" };
+}
+
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <div>
+        <h1 class="mb-1">Monitoring Dashboard</h1>
+        <p class="text-muted mb-0">Live patient vitals &amp; bed allocation &mdash; checked every 5 minutes.</p>
+    </div>
+</div>
+
+@if (TempData["Status"] is string status)
+{
+    <div class="alert alert-info">@status</div>
+}
+
+@* ---------- Stat tiles ---------- *@
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-teal">
+            <div class="stat-icon">&#128100;</div>
+            <div>
+                <div class="stat-value">@totalPatients</div>
+                <div class="stat-label">Patients</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-red">
+            <div class="stat-icon">&#10084;&#65039;</div>
+            <div>
+                <div class="stat-value">@criticalCount</div>
+                <div class="stat-label">Critical</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-blue">
+            <div class="stat-icon">&#128719;&#65039;</div>
+            <div>
+                <div class="stat-value">@occupiedBeds / @beds.Count</div>
+                <div class="stat-label">Beds Occupied</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-amber">
+            <div class="stat-icon">&#9888;&#65039;</div>
+            <div>
+                <div class="stat-value">@overdueBeds</div>
+                <div class="stat-label">Sanitation Overdue</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ---------- Filter buttons ---------- *@
+<div class="btn-group mb-3" role="group">
+    @foreach (var f in filters)
+    {
+        <a asp-action="Index" asp-route-filter="@f"
+           class="btn btn-sm @(f == filter ? "btn-primary" : "btn-outline-primary")">@f</a>
+    }
+</div>
+
+<div class="row g-4">
+    @* ---------- Patient vitals table ---------- *@
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header text-white d-flex justify-content-between align-items-center py-2">
+                <span>Patient Vitals (@patients.Count)</span>
+                <a class="btn btn-sm btn-light" asp-controller="Patients" asp-action="Create">+ Add Patient</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Temp (C)</th>
+                            <th>Pulse</th>
+                            <th>O2 %</th>
+                            <th>Status</th>
+                            <th>Bed</th>
+                            <th style="width: 30%">Allocation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in patients)
+                        {
+                            <tr class="@(p.IsCritical ? "table-danger" : null)">
+                                <td>
+                                    <strong>@p.PatientName</strong><br />
+                                    <small class="text-muted">@p.Age yrs &middot; @p.DiseaseCategory</small>
+                                </td>
+                                <td><span class="vital-value">@p.Temperature.ToString("0.0")</span></td>
+                                <td><span class="vital-value">@p.PulseRate</span></td>
+                                <td>
+                                    <span class="vital-value @(p.OxygenLevel < 92 ? "text-danger" : "")">
+                                        @p.OxygenLevel.ToString("0.0")
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (p.IsCritical)
+                                    {
+                                        <span class="badge bg-danger"><span class="pulse-dot"></span>CRITICAL</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Stable</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (p.AssignedBedID.HasValue)
+                                    {
+                                        var bed = beds.FirstOrDefault(b => b.BedID == p.AssignedBedID.Value);
+                                        <span class="badge bg-primary">@(bed?.WardName ?? "?")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">None</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!p.AssignedBedID.HasValue)
+                                    {
+                                        @* Automatic allocation - system picks a rule-compliant bed *@
+                                        <form asp-action="Allocate" method="post" class="d-inline">
+                                            <input type="hidden" name="patientId" value="@p.PatientID" />
+                                            <button class="btn btn-sm btn-success">Auto Allocate</button>
+                                        </form>
+                                        @* Manual pick - wrong picks are rejected by the safety rules *@
+                                        <form asp-action="AllocateTo" method="post" class="d-inline-flex gap-1">
+                                            <input type="hidden" name="patientId" value="@p.PatientID" />
+                                            <select name="bedId" class="form-select form-select-sm">
+                                                @foreach (var b in beds.Where(b => b.IsAssignable()))
+                                                {
+                                                    <option value="@b.BedID">@b.WardName (@b.BedType)</option>
+                                                }
+                                            </select>
+                                            <button class="btn btn-sm btn-outline-success">Assign</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="Deallocate" method="post" class="d-inline">
+                                            <input type="hidden" name="patientId" value="@p.PatientID" />
+                                            <button class="btn btn-sm btn-outline-warning">Release Bed</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        @if (!patients.Any())
+                        {
+                            <tr><td colspan="7" class="text-center text-muted py-4">No patients match this filter.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @* ---------- Bed occupancy grid ---------- *@
+        <div class="card mt-4">
+            <div class="card-header text-white d-flex justify-content-between align-items-center py-2">
+                <span>Bed Occupancy (@occupiedBeds/@beds.Count occupied)</span>
+                <a class="btn btn-sm btn-light" asp-controller="Beds" asp-action="Create">+ Add Bed</a>
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    @foreach (var b in beds)
+                    {
+                        var css = b.IsOccupied ? "bed-occupied"
+                                : b.IsSanitationOverdue() ? "bed-overdue"
+                                : "bed-free";
+                        var label = b.IsOccupied ? "Occupied"
+                                  : b.IsSanitationOverdue() ? "Sanitation overdue"
+                                  : "Ready";
+                        <div class="col-md-3 col-6">
+                            <div class="bed-tile @css">
+                                <div class="bed-name">@b.WardName</div>
+                                <div><small>@b.BedType</small></div>
+                                <div><small>@label</small></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ---------- Live alert feed (polled from /Dashboard/Alerts) ---------- *@
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header text-white d-flex justify-content-between align-items-center py-2">
+                <span>Event Notifications</span>
+                <span class="badge bg-light text-dark" id="alertCount">0</span>
+            </div>
+            <div class="card-body p-2" id="alertFeed" style="max-height: 68vh; overflow-y: auto;">
+                <div class="text-muted text-center py-3">Waiting for events...</div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body small text-muted">
+                <strong>Safety rules active:</strong>
+                <ul class="mb-0 ps-3">
+                    <li>O2 below 92% marks patient critical + doctor alert</li>
+                    <li>Temperature must be 35&ndash;42 C</li>
+                    <li>Beds require sanitation within 48 hours</li>
+                    <li>ICU beds only for critical patients</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Poll the alerts endpoint every 3 seconds so new event notifications
+    // appear without a page reload.
+    setInterval(async () => {
+        try {
+            const res = await fetch('/Dashboard/Alerts');
+            const alerts = await res.json();
+            const feed = document.getElementById('alertFeed');
+            document.getElementById('alertCount').textContent = alerts.length;
+
+            if (!alerts.length) return;
+            const cssMap = {
+                CriticalVital: 'critical',
+                AllocationFailed: 'failed',
+                SanitationOverdue: 'overdue',
+                BedAllocated: 'success'
+            };
+            feed.innerHTML = alerts.map(a => `
+                <div class="alert-item ${cssMap[a.type] || 'overdue'}">
+                    <div class="alert-time">${new Date(a.timestamp).toLocaleTimeString()}</div>
+                    <div class="alert-msg">${a.message}</div>
+                </div>`).join('');
+        } catch { /* ignore transient poll errors */ }
+    }, 3000);
+</script>
+}
