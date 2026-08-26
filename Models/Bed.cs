@@ -34,15 +34,16 @@ namespace WebApplication2.Models
         public bool IsOccupied { get; set; }
 
         // Timestamp of the last sanitation cycle. Must be within 48h for allocation.
+        // Use UtcNow for PostgreSQL timestamp with time zone compatibility (Neon pooled).
         [Display(Name = "Last Sanitized")]
-        public DateTime LastSanitized { get; set; } = DateTime.Now;
+        public DateTime LastSanitized { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// True when more than 48 hours have passed since the last sanitation.
         /// Such beds must not be allocated until re-sanitized.
         /// </summary>
         public bool IsSanitationOverdue()
-            => DateTime.Now - LastSanitized > TimeSpan.FromHours(48);
+            => DateTime.UtcNow - LastSanitized > TimeSpan.FromHours(48);
 
         /// <summary>
         /// A bed can be allocated only when it is free and freshly sanitized.
@@ -54,6 +55,6 @@ namespace WebApplication2.Models
         /// Marks the bed as sanitized right now (staff action from the UI).
         /// </summary>
         public void MarkSanitized()
-            => LastSanitized = DateTime.Now;
+            => LastSanitized = DateTime.UtcNow;
     }
 }

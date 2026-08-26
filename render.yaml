@@ -6,3 +6,5 @@ services:
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
+      - key: DATABASE_URL
+        sync: false

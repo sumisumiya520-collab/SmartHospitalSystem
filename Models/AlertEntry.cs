@@ -18,7 +18,7 @@ namespace WebApplication2.Models
     {
         public Guid AlertID { get; set; } = Guid.NewGuid();
 
-        public DateTime Timestamp { get; set; } = DateTime.Now;
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
         public AlertType Type { get; set; }
 
