@@ -5,6 +5,6 @@ services:
     dockerfilePath: ./Dockerfile
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
-        value: Production
+        value: Development # TEMPORARY: full stack trace for debugging — revert to Production after fix
       - key: DATABASE_URL
         sync: false
