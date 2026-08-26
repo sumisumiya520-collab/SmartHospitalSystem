@@ -20,6 +20,10 @@ public class HospitalDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Patient>().HasKey(p => p.PatientID);
+        modelBuilder.Entity<Bed>().HasKey(b => b.BedID);
+        modelBuilder.Entity<AlertEntry>().HasKey(a => a.AlertID);
+
         // Patient: IsCritical has private setter, EF Core can set via backing field.
         modelBuilder.Entity<Patient>()
             .Property(p => p.IsCritical)
