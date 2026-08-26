@@ -7,6 +7,11 @@ RUN dotnet publish -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    krb5-libs \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 EXPOSE 8080
