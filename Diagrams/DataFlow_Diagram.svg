@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <style>
+      .flow-box { rx: 8; stroke-width: 2; }
+      .flow-label { font-size: 12px; font-weight: bold; fill: white; }
+      .flow-detail { font-size: 10px; fill: #555; }
+      .flow-arrow { stroke: #2E75B6; stroke-width: 2; fill: none; marker-end: url(#flowArrow); }
+      .flow-dash { stroke: #E74C3C; stroke-width: 1.5; fill: none; stroke-dasharray: 6,3; marker-end: url(#flowArrow2); }
+      .title { font-size: 20px; font-weight: bold; fill: #1F3864; }
+    </style>
+    <marker id="flowArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2E75B6"/>
+    </marker>
+    <marker id="flowArrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#E74C3C"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="500" fill="#FAFAFA" rx="12"/>
+  <text x="450" y="35" text-anchor="middle" class="title">Data Flow Diagram</text>
+  <text x="450" y="55" text-anchor="middle" font-size="13" fill="#666">Request-Response Flow &amp; Background Monitoring</text>
+
+  <!-- ===== User ===== -->
+  <circle cx="100" cy="250" r="35" fill="#34495E"/>
+  <text x="100" y="245" text-anchor="middle" class="flow-label" font-size="11">User</text>
+  <text x="100" y="260" text-anchor="middle" font-size="9" fill="#DDD">(Browser)</text>
+
+  <!-- Arrow: User -> Router -->
+  <line x1="135" y1="250" x2="200" y2="250" class="flow-arrow"/>
+  <text x="168" y="242" text-anchor="middle" font-size="9" fill="#2E75B6">HTTP</text>
+
+  <!-- ===== Router ===== -->
+  <rect x="205" y="225" width="100" height="50" fill="#8E44AD" class="flow-box"/>
+  <text x="255" y="248" text-anchor="middle" class="flow-label">Router</text>
+  <text x="255" y="262" text-anchor="middle" font-size="9" fill="#D7BDE2">/Controller/Action</text>
+
+  <!-- Arrow: Router -> Controller -->
+  <line x1="305" y1="250" x2="370" y2="250" class="flow-arrow"/>
+  <text x="338" y="242" text-anchor="middle" font-size="9" fill="#2E75B6">Routes</text>
+
+  <!-- ===== Controller ===== -->
+  <rect x="375" y="200" width="140" height="100" fill="#1ABC9C" class="flow-box"/>
+  <text x="445" y="225" text-anchor="middle" class="flow-label">Controller</text>
+  <text x="445" y="242" text-anchor="middle" font-size="9" fill="#E8F8F5">Handles Request</text>
+  <text x="445" y="256" text-anchor="middle" font-size="9" fill="#E8F8F5">Validates Input</text>
+  <text x="445" y="270" text-anchor="middle" font-size="9" fill="#E8F8F5">Calls Service</text>
+  <text x="445" y="284" text-anchor="middle" font-size="9" fill="#E8F8F5">Returns View/JSON</text>
+
+  <!-- Arrow: Controller -> Service -->
+  <line x1="515" y1="250" x2="580" y2="250" class="flow-arrow"/>
+  <text x="548" y="242" text-anchor="middle" font-size="9" fill="#2E75B6">Calls</text>
+
+  <!-- ===== HospitalManager ===== -->
+  <rect x="585" y="200" width="140" height="100" fill="#F39C12" class="flow-box"/>
+  <text x="655" y="225" text-anchor="middle" class="flow-label">HospitalManager</text>
+  <text x="655" y="242" text-anchor="middle" font-size="9" fill="#FFF">Business Logic</text>
+  <text x="655" y="256" text-anchor="middle" font-size="9" fill="#FFF">Safety Rules</text>
+  <text x="655" y="270" text-anchor="middle" font-size="9" fill="#FFF">Event Publishing</text>
+  <text x="655" y="284" text-anchor="middle" font-size="9" fill="#FFF">CRUD Operations</text>
+
+  <!-- Arrow: Service -> Database -->
+  <line x1="725" y1="250" x2="780" y2="250" class="flow-arrow"/>
+  <text x="753" y="242" text-anchor="middle" font-size="9" fill="#2E75B6">EF Core</text>
+
+  <!-- ===== Database ===== -->
+  <rect x="785" y="210" width="100" height="80" fill="#2E75B6" class="flow-box"/>
+  <text x="835" y="238" text-anchor="middle" class="flow-label">Database</text>
+  <text x="835" y="255" text-anchor="middle" font-size="9" fill="#D4E6F1">Neon PostgreSQL</text>
+  <text x="835" y="269" text-anchor="middle" font-size="9" fill="#D4E6F1">SQL Server</text>
+
+  <!-- ===== Background Service (bottom) ===== -->
+  <rect x="200" y="370" width="500" height="100" fill="#FDEDEC" stroke="#E74C3C" stroke-width="1.5" rx="10"/>
+  <text x="450" y="392" text-anchor="middle" font-size="14" font-weight="bold" fill="#E74C3C">Background Service (VitalsMonitorService)</text>
+
+  <rect x="220" y="405" width="130" height="55" fill="#E74C3C" rx="6"/>
+  <text x="285" y="428" text-anchor="middle" class="flow-label" font-size="10">5-Minute Timer</text>
+  <text x="285" y="445" text-anchor="middle" font-size="9" fill="#FADBD8">PeriodicTimer</text>
+
+  <rect x="370" y="405" width="130" height="55" fill="#C0392B" rx="6"/>
+  <text x="435" y="428" text-anchor="middle" class="flow-label" font-size="10">Simulate Vitals</text>
+  <text x="435" y="445" text-anchor="middle" font-size="9" fill="#FADBD8">Random Drift</text>
+
+  <rect x="520" y="405" width="170" height="55" fill="#A93226" rx="6"/>
+  <text x="605" y="428" text-anchor="middle" class="flow-label" font-size="10">Check Alerts</text>
+  <text x="605" y="445" text-anchor="middle" font-size="9" fill="#FADBD8">O2 &lt; 92% = Critical</text>
+
+  <!-- Dashed arrow: Background -> HospitalManager -->
+  <path d="M450 370 Q450 330 655 300" class="flow-dash"/>
+  <text x="530" y="320" font-size="9" fill="#E74C3C">Creates Scope</text>
+
+  <!-- ===== Dashboard Polling (top-right) ===== -->
+  <rect x="600" y="70" width="250" height="80" fill="#EBF5FB" stroke="#3498DB" stroke-width="1.5" rx="8"/>
+  <text x="725" y="95" text-anchor="middle" font-size="13" font-weight="bold" fill="#2980B9">Dashboard JavaScript Poller</text>
+  <text x="725" y="112" text-anchor="middle" font-size="10" fill="#555">fetch('/Dashboard/Alerts')</text>
+  <text x="725" y="126" text-anchor="middle" font-size="10" fill="#555">Every 3 seconds</text>
+  <text x="725" y="140" text-anchor="middle" font-size="10" fill="#555">Updates alert feed in real-time</text>
+
+  <!-- Dashed arrow: Database -> Poller -->
+  <path d="M835 210 Q850 130 850 110" class="flow-dash"/>
+  <text x="860" y="165" font-size="9" fill="#E74C3C" transform="rotate(90,860,165)">JSON Response</text>
+
+  <!-- ===== View Rendering ===== -->
+  <rect x="600" y="380" width="250" height="70" fill="#D5F5E3" stroke="#27AE60" stroke-width="1.5" rx="8"/>
+  <text x="725" y="405" text-anchor="middle" font-size="13" font-weight="bold" fill="#27AE60">Razor View Rendering</text>
+  <text x="725" y="422" text-anchor="middle" font-size="10" fill="#555">HTML + Bootstrap + Tag Helpers</text>
+  <text x="725" y="436" text-anchor="middle" font-size="10" fill="#555">Returns rendered HTML to browser</text>
+
+  <!-- Dashed arrow: Controller -> View -->
+  <path d="M515 280 Q560 380 600 400" class="flow-dash"/>
+  <text x="555" y="345" font-size="9" fill="#27AE60">Renders View</text>
+
+  <!-- ===== Return path ===== -->
+  <path d="M100 250 L100 80 Q100 50 130 50 L850 50 Q880 50 880 80 L880 250" stroke="#CCC" stroke-width="1.5" fill="none" stroke-dasharray="8,4"/>
+  <text x="450" y="42" text-anchor="middle" font-size="9" fill="#999">HTTP Response (HTML/JSON) returned to browser</text>
+</svg>

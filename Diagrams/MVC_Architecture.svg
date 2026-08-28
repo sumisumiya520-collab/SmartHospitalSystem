@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <style>
+      .layer { rx: 10; }
+      .label { font-size: 14px; font-weight: bold; fill: white; }
+      .detail { font-size: 11px; fill: #333; }
+      .arrow-line { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#archArrow); }
+      .arrow-back { stroke: #999; stroke-width: 1.5; fill: none; stroke-dasharray: 5,3; marker-end: url(#archArrow2); }
+      .title { font-size: 20px; font-weight: bold; fill: #1F3864; }
+    </style>
+    <marker id="archArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+    <marker id="archArrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#999"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="600" fill="#FAFAFA" rx="12"/>
+  <text x="450" y="35" text-anchor="middle" class="title">MVC Architecture Diagram</text>
+  <text x="450" y="55" text-anchor="middle" font-size="13" fill="#666">Model - View - Controller Pattern with Dependency Injection</text>
+
+  <!-- ===== USER / BROWSER ===== -->
+  <rect x="350" y="70" width="200" height="50" fill="#34495E" class="layer" rx="25"/>
+  <text x="450" y="100" text-anchor="middle" class="label" font-size="15">User (Browser)</text>
+  <text x="450" y="115" text-anchor="middle" font-size="10" fill="#AAA">HTTP Requests / Responses</text>
+
+  <!-- Arrow: User -> Controller -->
+  <line x1="450" y1="120" x2="450" y2="155" class="arrow-line"/>
+  <text x="460" y="140" font-size="10" fill="#666">GET / POST</text>
+
+  <!-- ===== CONTROLLER LAYER ===== -->
+  <rect x="80" y="160" width="740" height="120" fill="#E8F8F5" stroke="#1ABC9C" stroke-width="2" class="layer"/>
+  <text x="450" y="182" text-anchor="middle" font-size="16" font-weight="bold" fill="#1ABC9C">Controller Layer</text>
+
+  <rect x="100" y="195" width="160" height="70" fill="#1ABC9C" class="layer" rx="6"/>
+  <text x="180" y="222" text-anchor="middle" class="label" font-size="12">HomeController</text>
+  <text x="180" y="240" text-anchor="middle" font-size="9" fill="#E8F8F5">Index(), Privacy()</text>
+  <text x="180" y="252" text-anchor="middle" font-size="9" fill="#E8F8F5">DbCheck(), Error()</text>
+
+  <rect x="280" y="195" width="160" height="70" fill="#1ABC9C" class="layer" rx="6"/>
+  <text x="360" y="222" text-anchor="middle" class="label" font-size="12">PatientsController</text>
+  <text x="360" y="240" text-anchor="middle" font-size="9" fill="#E8F8F5">Index, Create, Edit</text>
+  <text x="360" y="252" text-anchor="middle" font-size="9" fill="#E8F8F5">Details, Delete</text>
+
+  <rect x="460" y="195" width="160" height="70" fill="#1ABC9C" class="layer" rx="6"/>
+  <text x="540" y="222" text-anchor="middle" class="label" font-size="12">DashboardController</text>
+  <text x="540" y="240" text-anchor="middle" font-size="9" fill="#E8F8F5">Index, Alerts (JSON)</text>
+  <text x="540" y="252" text-anchor="middle" font-size="9" fill="#E8F8F5">Allocate, Deallocate</text>
+
+  <rect x="640" y="195" width="160" height="70" fill="#1ABC9C" class="layer" rx="6"/>
+  <text x="720" y="222" text-anchor="middle" class="label" font-size="12">BedsController</text>
+  <text x="720" y="240" text-anchor="middle" font-size="9" fill="#E8F8F5">Index, Create, Edit</text>
+  <text x="720" y="252" text-anchor="middle" font-size="9" fill="#E8F8F5">Sanitize, Delete</text>
+
+  <!-- Arrow: Controller -> Model -->
+  <line x1="450" y1="280" x2="450" y2="315" class="arrow-line"/>
+  <text x="460" y="300" font-size="10" fill="#666">Calls HospitalManager</text>
+
+  <!-- ===== MODEL LAYER ===== -->
+  <rect x="80" y="320" width="740" height="130" fill="#FEF9E7" stroke="#F39C12" stroke-width="2" class="layer"/>
+  <text x="450" y="342" text-anchor="middle" font-size="16" font-weight="bold" fill="#F39C12">Model / Service Layer</text>
+
+  <rect x="100" y="355" width="200" height="80" fill="#F39C12" class="layer" rx="6"/>
+  <text x="200" y="382" text-anchor="middle" class="label" font-size="13">HospitalManager</text>
+  <text x="200" y="400" text-anchor="middle" font-size="9" fill="#FFF">Business Logic</text>
+  <text x="200" y="414" text-anchor="middle" font-size="9" fill="#FFF">CRUD, Allocation Engine</text>
+  <text x="200" y="428" text-anchor="middle" font-size="9" fill="#FFF">Events (Observer Pattern)</text>
+
+  <rect x="320" y="355" width="120" height="80" fill="#E67E22" class="layer" rx="6"/>
+  <text x="380" y="380" text-anchor="middle" class="label" font-size="11">Patient</text>
+  <text x="380" y="396" text-anchor="middle" font-size="9" fill="#FFF">Data Model</text>
+  <text x="380" y="410" text-anchor="middle" font-size="9" fill="#FFF">Validation</text>
+  <text x="380" y="424" text-anchor="middle" font-size="9" fill="#FFF">Events</text>
+
+  <rect x="460" y="355" width="100" height="80" fill="#E67E22" class="layer" rx="6"/>
+  <text x="510" y="380" text-anchor="middle" class="label" font-size="11">Bed</text>
+  <text x="510" y="396" text-anchor="middle" font-size="9" fill="#FFF">Data Model</text>
+  <text x="510" y="410" text-anchor="middle" font-size="9" fill="#FFF">Sanitation</text>
+  <text x="510" y="424" text-anchor="middle" font-size="9" fill="#FFF">Rules</text>
+
+  <rect x="580" y="355" width="120" height="80" fill="#E67E22" class="layer" rx="6"/>
+  <text x="640" y="380" text-anchor="middle" class="label" font-size="11">AlertEntry</text>
+  <text x="640" y="396" text-anchor="middle" font-size="9" fill="#FFF">Notification</text>
+  <text x="640" y="410" text-anchor="middle" font-size="9" fill="#FFF">Type + CSS</text>
+
+  <rect x="720" y="355" width="90" height="80" fill="#8E44AD" class="layer" rx="6"/>
+  <text x="765" y="380" text-anchor="middle" class="label" font-size="10">Background</text>
+  <text x="765" y="396" text-anchor="middle" font-size="9" fill="#FFF">Service</text>
+  <text x="765" y="410" text-anchor="middle" font-size="9" fill="#FFF">5-min tick</text>
+  <text x="765" y="424" text-anchor="middle" font-size="9" fill="#FFF">Simulation</text>
+
+  <!-- Arrow: Model -> Database -->
+  <line x1="450" y1="450" x2="450" y2="485" class="arrow-line"/>
+  <text x="460" y="470" font-size="10" fill="#666">Entity Framework Core (ORM)</text>
+
+  <!-- ===== DATABASE ===== -->
+  <rect x="150" y="490" width="600" height="90" fill="#D4E6F1" stroke="#2E75B6" stroke-width="2" class="layer"/>
+  <text x="450" y="512" text-anchor="middle" font-size="16" font-weight="bold" fill="#2E75B6">Data Access Layer (Database)</text>
+
+  <rect x="170" y="525" width="170" height="45" fill="#2E75B6" class="layer" rx="6"/>
+  <text x="255" y="552" text-anchor="middle" class="label" font-size="11">HospitalDbContext</text>
+
+  <rect x="360" y="525" width="170" height="45" fill="#3498DB" class="layer" rx="6"/>
+  <text x="445" y="552" text-anchor="middle" class="label" font-size="11">Neon PostgreSQL</text>
+
+  <rect x="550" y="525" width="180" height="45" fill="#3498DB" class="layer" rx="6"/>
+  <text x="640" y="552" text-anchor="middle" class="label" font-size="11">SQL Server LocalDB</text>
+
+  <!-- ===== VIEW LAYER (right side) ===== -->
+  <rect x="720" y="160" width="0" height="0" fill="none"/>
+
+  <!-- View layer arrows -->
+  <path d="M850 195 Q880 250 850 350" class="arrow-back"/>
+  <text x="870" y="280" font-size="10" fill="#999" transform="rotate(90,870,280)">Returns View</text>
+
+  <!-- ===== VIEW LAYER (bottom-right) ===== -->
+  <rect x="720" y="160" width="0" height="0"/>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="30" y="520" width="100" height="60" fill="#F8F9FA" stroke="#DDD" rx="4"/>
+  <text x="80" y="538" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Legend</text>
+  <rect x="40" y="545" width="12" height="8" fill="#1ABC9C" rx="2"/>
+  <text x="58" y="553" font-size="9" fill="#333">Controller</text>
+  <rect x="40" y="558" width="12" height="8" fill="#F39C12" rx="2"/>
+  <text x="58" y="566" font-size="9" fill="#333">Model</text>
+</svg>

@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 800" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <style>
+      .class-box { fill: #FFFFFF; stroke: #2E75B6; stroke-width: 2; }
+      .class-header { fill: #2E75B6; }
+      .class-section { font-size: 12px; fill: #333; }
+      .class-name { font-size: 14px; font-weight: bold; fill: white; }
+      .prop { font-size: 11px; fill: #333; }
+      .method { font-size: 11px; fill: #1A5276; }
+      .separator { stroke: #CCC; stroke-width: 1; }
+      .arrow { stroke: #666; stroke-width: 1.5; fill: none; marker-end: url(#classArrow); }
+      .dash-arrow { stroke: #999; stroke-width: 1.5; fill: none; stroke-dasharray: 5,3; marker-end: url(#classArrow); }
+      .title { font-size: 20px; font-weight: bold; fill: #1F3864; }
+      .subtitle { font-size: 13px; fill: #666; }
+    </style>
+    <marker id="classArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+    <marker id="diamond" markerWidth="12" markerHeight="8" refX="0" refY="4" orient="auto">
+      <polygon points="6 0, 12 4, 6 8, 0 4" fill="#2E75B6" stroke="#2E75B6" stroke-width="1"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="800" fill="#FAFAFA" rx="12"/>
+  <text x="550" y="35" text-anchor="middle" class="title">Class Diagram</text>
+  <text x="550" y="55" text-anchor="middle" class="subtitle">Smart Hospital System - Source Code Structure</text>
+
+  <!-- ===== Patient Class ===== -->
+  <rect x="30" y="80" width="240" height="280" class="class-box" rx="6"/>
+  <rect x="30" y="80" width="240" height="30" class="class-header" rx="6"/>
+  <rect x="30" y="100" width="240" height="10" fill="white"/>
+  <text x="150" y="100" text-anchor="middle" class="class-name">Patient</text>
+  <line x1="30" y1="130" x2="270" y2="130" class="separator"/>
+  <text x="40" y="148" class="prop">+ PatientID : Guid</text>
+  <text x="40" y="164" class="prop">+ PatientName : string</text>
+  <text x="40" y="180" class="prop">+ Age : int</text>
+  <text x="40" y="196" class="prop">+ DiseaseCategory : string</text>
+  <text x="40" y="212" class="prop">+ Temperature : double</text>
+  <text x="40" y="228" class="prop">+ PulseRate : int</text>
+  <text x="40" y="244" class="prop">+ OxygenLevel : double</text>
+  <text x="40" y="260" class="prop">- IsCritical : bool {private}</text>
+  <text x="40" y="276" class="prop">+ AssignedBedID : Guid?</text>
+  <line x1="30" y1="288" x2="270" y2="288" class="separator"/>
+  <text x="40" y="306" class="method">+ EvaluateCriticalStatus() : void</text>
+  <text x="40" y="322" class="method">+ UpdateVitals(temp, pulse, o2) : void</text>
+  <text x="40" y="338" class="method">+ VitalsDroppedCritical : event</text>
+
+  <!-- ===== Bed Class ===== -->
+  <rect x="400" y="80" width="240" height="220" class="class-box" rx="6"/>
+  <rect x="400" y="80" width="240" height="30" class="class-header" rx="6"/>
+  <rect x="400" y="100" width="240" height="10" fill="white"/>
+  <text x="520" y="100" text-anchor="middle" class="class-name">Bed</text>
+  <line x1="400" y1="130" x2="640" y2="130" class="separator"/>
+  <text x="410" y="148" class="prop">+ BedID : Guid</text>
+  <text x="410" y="164" class="prop">+ WardName : string</text>
+  <text x="410" y="180" class="prop">+ BedType : BedType (enum)</text>
+  <text x="410" y="196" class="prop">+ IsOccupied : bool</text>
+  <text x="410" y="212" class="prop">+ LastSanitized : DateTime</text>
+  <line x1="400" y1="224" x2="640" y2="224" class="separator"/>
+  <text x="410" y="242" class="method">+ IsSanitationOverdue() : bool</text>
+  <text x="410" y="258" class="method">+ IsAssignable() : bool</text>
+  <text x="410" y="274" class="method">+ MarkSanitized() : void</text>
+
+  <!-- ===== AlertEntry Class ===== -->
+  <rect x="770" y="80" width="260" height="200" class="class-box" rx="6"/>
+  <rect x="770" y="80" width="260" height="30" class="class-header" rx="6"/>
+  <rect x="770" y="100" width="260" height="10" fill="white"/>
+  <text x="900" y="100" text-anchor="middle" class="class-name">AlertEntry</text>
+  <line x1="770" y1="130" x2="1030" y2="130" class="separator"/>
+  <text x="780" y="148" class="prop">+ AlertID : Guid</text>
+  <text x="780" y="164" class="prop">+ Timestamp : DateTime</text>
+  <text x="780" y="180" class="prop">+ Type : AlertType (enum)</text>
+  <text x="780" y="196" class="prop">+ Message : string</text>
+  <text x="780" y="212" class="prop">+ CssClass : string {computed}</text>
+  <line x1="770" y1="224" x2="1030" y2="224" class="separator"/>
+  <text x="780" y="242" class="method">CssClass = Type switch {</text>
+  <text x="790" y="258" class="method">  CriticalVital =&gt; "alert-danger"</text>
+  <text x="790" y="274" class="method">  BedAllocated =&gt; "alert-success" ...}</text>
+
+  <!-- ===== HospitalManager Class ===== -->
+  <rect x="250" y="400" width="600" height="340" class="class-box" rx="6" stroke="#C0392B" stroke-width="2.5"/>
+  <rect x="250" y="400" width="600" height="30" fill="#C0392B" rx="6"/>
+  <rect x="250" y="420" width="600" height="10" fill="white"/>
+  <text x="550" y="420" text-anchor="middle" class="class-name" fill="white">HospitalManager (Central Business Service)</text>
+  <line x1="250" y1="450" x2="850" y2="450" class="separator"/>
+  <text x="260" y="468" class="prop">- _db : HospitalDbContext</text>
+  <text x="260" y="484" class="prop">+ Patients : IReadOnlyList&lt;Patient&gt;</text>
+  <text x="260" y="500" class="prop">+ Beds : IReadOnlyList&lt;Bed&gt;</text>
+  <text x="260" y="516" class="prop">+ Alerts : IReadOnlyList&lt;AlertEntry&gt;</text>
+  <text x="500" y="468" class="prop">+ CriticalVitalAlert : event</text>
+  <text x="500" y="484" class="prop">+ BedAllocated : event</text>
+  <text x="500" y="500" class="prop">+ AllocationFailed : event</text>
+  <text x="500" y="516" class="prop">+ SanitationOverdue : event</text>
+  <line x1="250" y1="530" x2="850" y2="530" class="separator"/>
+
+  <!-- Methods - left column -->
+  <text x="260" y="548" class="method">+ AddPatient(patient) : void</text>
+  <text x="260" y="564" class="method">+ GetPatient(id) : Patient?</text>
+  <text x="260" y="580" class="method">+ UpdatePatient(updated) : bool</text>
+  <text x="260" y="596" class="method">+ RemovePatient(id) : bool</text>
+  <text x="260" y="612" class="method">+ AddBed(bed) : void</text>
+  <text x="260" y="628" class="method">+ GetBed(id) : Bed?</text>
+  <text x="260" y="644" class="method">+ UpdateBed(updated) : bool</text>
+  <text x="260" y="660" class="method">+ RemoveBed(id) : bool</text>
+  <text x="260" y="676" class="method">+ SanitizeBed(id) : bool</text>
+
+  <!-- Methods - right column -->
+  <text x="530" y="548" class="method">+ AllocateBed(patientId, bedId?) : bool</text>
+  <text x="530" y="564" class="method">+ DeallocatePatient(patientId) : bool</text>
+  <text x="530" y="580" class="method">+ GetRecentAlerts(count) : List</text>
+  <text x="530" y="596" class="method">+ SeedSampleData() : void</text>
+  <text x="530" y="612" class="method">- DeallocateInternal(patient, reason)</text>
+  <text x="530" y="628" class="method">- Raise(handlers, type, msg) : void</text>
+  <text x="530" y="644" class="method">~ ApplyVitals(id, temp, pulse, o2)</text>
+  <text x="530" y="660" class="method">~ CheckSanitationDeadlines()</text>
+
+  <!-- ===== HospitalDbContext Class ===== -->
+  <rect x="30" y="400" width="190" height="160" class="class-box" rx="6" stroke="#27AE60" stroke-width="2"/>
+  <rect x="30" y="400" width="190" height="28" fill="#27AE60" rx="6"/>
+  <rect x="30" y="420" width="190" height="8" fill="white"/>
+  <text x="125" y="419" text-anchor="middle" class="class-name" fill="white" font-size="12">HospitalDbContext</text>
+  <line x1="30" y1="448" x2="220" y2="448" class="separator"/>
+  <text x="40" y="466" class="prop">+ Patients : DbSet&lt;Patient&gt;</text>
+  <text x="40" y="482" class="prop">+ Beds : DbSet&lt;Bed&gt;</text>
+  <text x="40" y="498" class="prop">+ Alerts : DbSet&lt;AlertEntry&gt;</text>
+  <line x1="30" y1="510" x2="220" y2="510" class="separator"/>
+  <text x="40" y="528" class="method">OnModelCreating(builder)</text>
+  <text x="40" y="544" class="method">EnsureCreated()</text>
+
+  <!-- ===== VitalsMonitorService Class ===== -->
+  <rect x="880" y="400" width="190" height="140" class="class-box" rx="6" stroke="#8E44AD" stroke-width="2"/>
+  <rect x="880" y="400" width="190" height="28" fill="#8E44AD" rx="6"/>
+  <rect x="880" y="420" width="190" height="8" fill="white"/>
+  <text x="975" y="419" text-anchor="middle" class="class-name" fill="white" font-size="12">VitalsMonitorService</text>
+  <line x1="880" y1="448" x2="1070" y2="448" class="separator"/>
+  <text x="890" y="466" class="prop">- _scopeFactory : IServiceScopeFactory</text>
+  <text x="890" y="482" class="prop">- _random : Random</text>
+  <text x="890" y="498" class="prop">- Interval : TimeSpan (5min)</text>
+  <line x1="880" y1="510" x2="1070" y2="510" class="separator"/>
+  <text x="890" y="528" class="method">ExecuteAsync(token)</text>
+  <text x="890" y="544" class="method">SimulateVitalsTick(hospital)</text>
+
+  <!-- ===== Relationship Arrows ===== -->
+  <!-- HospitalManager uses Patient -->
+  <path d="M370 400 L200 360" class="arrow" marker-end="url(#diamond)"/>
+  <text x="260" y="375" font-size="10" fill="#666">uses</text>
+
+  <!-- HospitalManager uses Bed -->
+  <line x1="440" y1="400" x2="520" y2="300" class="arrow" marker-end="url(#diamond)"/>
+  <text x="500" y="345" font-size="10" fill="#666">uses</text>
+
+  <!-- HospitalManager uses AlertEntry -->
+  <line x1="600" y1="400" x2="850" y2="280" class="arrow" marker-end="url(#diamond)"/>
+  <text x="760" y="335" font-size="10" fill="#666">creates</text>
+
+  <!-- HospitalManager depends on HospitalDbContext -->
+  <line x1="250" y1="480" x2="220" y2="480" class="dash-arrow"/>
+  <text x="230" y="474" font-size="9" fill="#999">depends on</text>
+
+  <!-- VitalsMonitorService uses HospitalManager -->
+  <line x1="880" y1="460" x2="850" y2="500" class="dash-arrow"/>
+  <text x="858" y="475" font-size="9" fill="#999">creates scope</text>
+
+  <!-- Enums -->
+  <rect x="400" y="310" width="100" height="50" fill="#FFF3E0" stroke="#E67E22" stroke-width="1" rx="4"/>
+  <text x="450" y="330" text-anchor="middle" font-size="11" font-weight="bold" fill="#E67E22">BedType</text>
+  <text x="450" y="348" text-anchor="middle" font-size="10" fill="#666">General | ICU</text>
+
+  <rect x="700" y="310" width="120" height="50" fill="#FFF3E0" stroke="#E67E22" stroke-width="1" rx="4"/>
+  <text x="760" y="330" text-anchor="middle" font-size="11" font-weight="bold" fill="#E67E22">AlertType</text>
+  <text x="760" y="348" text-anchor="middle" font-size="10" fill="#666">4 types</text>
+</svg>

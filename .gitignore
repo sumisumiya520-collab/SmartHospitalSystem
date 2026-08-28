@@ -16,3 +16,7 @@ x86/
 ## OS files
 Thumbs.db
 .DS_Store
+
+## Office temp / scratch files
+~$*
+*.tmp
